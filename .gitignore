@@ -23,6 +23,6 @@
 /Godeps/
 
 ### VS Code ###
-/.vscode/
+/.vscode
 
 # End of https://www.gitignore.io/api/go
