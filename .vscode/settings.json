@@ -1,0 +1,62 @@
+{
+    // go
+    "go.formatTool": "goimports",
+    "go.goroot": "/usr/local/go",
+    "go.gopath": "/root/go",
+    // "go.goroot": "/usr/local/Cellar/go/1.14/libexec",
+    // "go.gopath": "/Users/fusidic/go",
+    "go.autocompleteUnimportedPackages": true,
+    "explorer.confirmDelete": false,
+    "git.autofetch": true,
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+        // Optional: Disable snippets, as they conflict with completion ranking.
+        "editor.snippetSuggestions": "none",
+    },
+    "[go.mod]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "gopls": {
+        // Add parameter placeholders when completing a function.
+        "usePlaceholders": true,
+
+        // If true, enable additional analyses with staticcheck.
+        // Warning: This will significantly increase memory usage.
+        "staticcheck": false,
+        // "enhancedHover": true,
+    },
+    "files.eol": "\n", // formatting only supports LF line endings
+
+    // Some others templates
+    // "go.inferGopath": false,
+    // "go.buildOnSave": "workspace",
+    // "go.lintOnSave": "package",
+    // "go.vetOnSave": "package",
+    // "go.buildTags": "",
+    // "go.buildFlags": [],
+    // "go.lintFlags": [],
+    // "go.vetFlags": [],
+    // "go.coverOnSave": false,
+    // "go.useCodeSnippetsOnFunctionSuggest": false,
+    // "go.formatTool": "goreturns",
+    // "go.gocodeAutoBuild": false,
+    // "go.useLanguageServer": true,
+    // "go.alternateTools": {
+    //   "go-langserver": "gopls", 
+    // },
+    // "go.languageServerExperimentalFeatures": {
+    //   "format": true,
+    //   "autoComplete": true
+    // },
+    // "[go]": {
+    //     "editor.codeActionsOnSave": {
+    //         "source.organizeImports": true
+    //     },
+    // },
+}
