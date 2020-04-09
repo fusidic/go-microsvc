@@ -8,3 +8,5 @@ require (
 	github.com/micro/protobuf v0.0.0-20180321161605-ebd3be6d4fdb // indirect
 	google.golang.org/grpc v1.28.1
 )
+
+replace github.com/fusidic/go-microsvc/consignment-service/proto/consignment => /root/workspace/go/go-microsvc/consignment-service/proto/consignment
