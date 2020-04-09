@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	// Import the generated protobuf code
-	pb "github.com/fusidic/go-microsvc/consignment/proto/consignment"
+	pb "github.com/fusidic/go-microsvc/consignment-service/proto/consignment"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
