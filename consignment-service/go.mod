@@ -3,9 +3,10 @@ module github.com/fusidic/go-microsvc/consignment-service
 go 1.14
 
 require (
+	github.com/EwanValentine/shippy-service-vessel v0.0.0-20200113232044-568e51dd7413
 	github.com/coreos/etcd v3.3.20+incompatible // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
-	github.com/fusidic/go-microsvc/consignment-service/proto/consignment v0.0.0-20200409032713-45304bfb09cb
+	github.com/fusidic/go-microsvc/consignment-service/proto/consignment v0.0.0-20200409062354-c47f6ffc0885
 	github.com/go-log/log v0.2.0 // indirect
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
@@ -17,8 +18,9 @@ require (
 	go.uber.org/zap v1.14.1 // indirect
 	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
+	golang.org/x/sys v0.0.0-20200409092240-59c9f1ba88fa // indirect
 	golang.org/x/tools v0.0.0-20200408132156-9ee5ef7a2c0d // indirect
-	google.golang.org/grpc v1.28.1
+	google.golang.org/genproto v0.0.0-20200409111301-baae70f3302d // indirect
 	honnef.co/go/tools v0.0.1-2020.1.3 // indirect
 )
 

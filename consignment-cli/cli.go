@@ -10,11 +10,11 @@ import (
 	"context"
 
 	pb "github.com/fusidic/go-microsvc/consignment-service/proto/consignment"
-	"google.golang.org/grpc"
+	"github.com/micro/go-micro"
 )
 
 const (
-	address         = "localhost:50051"
+	// address         = "localhost:50051"
 	defaultFilename = "consignment.json"
 )
 
@@ -29,13 +29,20 @@ func parseFile(file string) (*pb.Consignment, error) {
 }
 
 func main() {
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
-	}
-	defer conn.Close()
-	client := pb.NewShippingServiceClient(conn)
+	// Set up a connection to the server. (gRPC version)
+	// conn, err := grpc.Dial(address, grpc.WithInsecure())
+	// if err != nil {
+	// 	log.Fatalf("Did not connect: %v", err)
+	// }
+	// defer conn.Close()
+	// client := pb.NewShippingServiceClient(conn)
+
+	// 使用go-micro构建服务consignment.cli
+	service := micro.NewService(micro.Name("consignment.cli"))
+	service.Init()
+
+	// 向consignment服务器注册服务consignment.cli
+	client := pb.NewShippingServiceClient("consignment", service.Client())
 
 	// Contact the server and print out its response.
 	file := defaultFilename

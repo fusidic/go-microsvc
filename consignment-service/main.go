@@ -4,11 +4,14 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"sync"
 
 	// Import the generated protobuf code
 
+	vesselProto "github.com/EwanValentine/shippy-service-vessel/proto/vessel"
 	pb "github.com/fusidic/go-microsvc/consignment-service/proto/consignment"
-	"github.com/micro/go-micro"
+	micro "github.com/micro/go-micro"
 )
 
 type repository interface {
@@ -16,36 +19,53 @@ type repository interface {
 	GetAll() []*pb.Consignment
 }
 
-// Repository - Dummy repository, this simulates the use of a datastore
-// of some kind. We'll replace this with a real implementation later on.
+// Repository - 暂时假装一个数据库
 type Repository struct {
+	// 由于多个服务访问存在竞争，需要引入读写锁
+	mu           sync.RWMutex
 	consignments []*pb.Consignment
 }
 
-// Create ...
+// Create 创建一个新的consignment
 func (repo *Repository) Create(consignment *pb.Consignment) (*pb.Consignment, error) {
+	repo.mu.Lock()
 	updated := append(repo.consignments, consignment)
 	repo.consignments = updated
+	repo.mu.Unlock()
 	return consignment, nil
 }
 
-// GetAll ...
+// GetAll consignments
 func (repo *Repository) GetAll() []*pb.Consignment {
 	return repo.consignments
 }
 
-// Service should implement all of the methods to satisfy the service
-// we defined in our protobuf definition. You can check the interface
-// in the generated code itself for the exact method signatures etc
-// to give you a better idea.
+// Service 需要实现protobuf.service中的所有定义，可以直接在pb.go中查找需要实现
+// 的方法以及函数签名。
 type service struct {
 	repo repository
+
+	// 引入vessel-service的接口
+	vesselClient vesselProto.VesselServiceClient
 }
 
 // CreateConsignment - 在proto中，我们给这个微服务定了两个方法，其中之
 // 一就是这个CreateConsignment方法，它接受一个context以及proto中定义
 // 的Consignment消息，这个Consignment是由gRPC的服务器处理后提供给你的
 func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
+
+	// 这里调用vessel-service中的方法，寻找合适的vessel
+	vesselResponse, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
+		MaxWeight: req.Weight,
+		Capacity:  int32(len(req.Containers)),
+	})
+	log.Printf("Found vessel: %s \n", vesselResponse.Vessel.Name)
+	if err != nil {
+		return err
+	}
+
+	// 从返回的vesselResponse中获取vessel id
+	req.VesselId = vesselResponse.Vessel.Id
 
 	// Save our consignment
 	consignment, err := s.repo.Create(req)
@@ -77,13 +97,16 @@ func main() {
 		// This name must match the package name given in your protobuf definition
 		// 注意：服务名必须和你在proto文件中定义的package名字相同
 		micro.Name("consignment"),
+		micro.Version("latest"),
 	)
 
 	// Init will parse the command line flags.
 	srv.Init()
 
+	vesselClient := vesselProto.NewVesselServiceClient("vessel", srv.Client())
+
 	// Register handler
-	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo})
+	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
 
 	// Run the server
 	if err := srv.Run(); err != nil {
